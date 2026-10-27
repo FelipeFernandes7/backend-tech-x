@@ -1,4 +1,4 @@
-# TechX Todo List — Backend
+# TechX Todo List - Backend
 
 API REST em NestJS e TypeScript responsável por autenticação, sessão JWT e persistência de tarefas em PostgreSQL. As operações sobre tarefas são vinculadas ao usuário autenticado, evitando acesso cruzado entre contas.
 
