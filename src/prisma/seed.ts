@@ -1,23 +1,7 @@
-import { connectDatabase, db } from "./db.ts";
-
-const users = [
-  { email: "alice@prisma.io", username: "alice", name: "Alice" },
-  { email: "bob@prisma.io", username: "bob", name: "Bob" },
-  { email: "carol@prisma.io", username: "carol", name: "Carol" },
-];
-
 let pendingSeed: Promise<void> | undefined;
 
 async function runSeed(): Promise<void> {
-  await connectDatabase();
-
-  for (const user of users) {
-    await db.orm.public.User.upsert({
-      create: user,
-      update: {},
-      conflictOn: { email: user.email },
-    });
-  }
+  // Application users are created through POST /auth/register.
 }
 
 export function seed(): Promise<void> {

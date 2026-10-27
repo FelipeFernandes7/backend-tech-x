@@ -3,9 +3,11 @@
 model User {
   id        Int      @id @default(autoincrement())
   email     String   @unique
-  username  String?
+  password  String?
   name      String?
+  username  String?
   posts     Post[]
+  tasks     Task[]
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
 }
@@ -14,8 +16,19 @@ model Post {
   id        Int      @id @default(autoincrement())
   title     String
   content   String?
-  author    User     @relation(fields: [authorId], references: [id])
+  author    User     @relation(fields: [authorId], references: [id], onDelete: Cascade)
   authorId  Int
   createdAt TimestamptzString @default(now())
   updatedAt temporal.updatedAtString()
+}
+
+model Task {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  completed   Boolean  @default(false)
+  owner       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      Int
+  createdAt   TimestamptzString @default(now())
+  updatedAt   temporal.updatedAtString()
 }

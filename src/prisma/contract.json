@@ -8,6 +8,10 @@
       "model": "Post",
       "namespace": "public"
     },
+    "Task": {
+      "model": "Task",
+      "namespace": "public"
+    },
     "User": {
       "model": "User",
       "namespace": "public"
@@ -105,6 +109,104 @@
               "table": "Post"
             }
           },
+          "Task": {
+            "fields": {
+              "completed": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/bool@1",
+                  "kind": "scalar"
+                }
+              },
+              "createdAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "description": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "id": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              },
+              "title": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "updatedAt": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "kind": "scalar"
+                }
+              },
+              "userId": {
+                "nullable": false,
+                "type": {
+                  "codecId": "pg/int4@1",
+                  "kind": "scalar"
+                }
+              }
+            },
+            "relations": {
+              "owner": {
+                "cardinality": "N:1",
+                "nullable": false,
+                "on": {
+                  "localFields": [
+                    "userId"
+                  ],
+                  "targetFields": [
+                    "id"
+                  ]
+                },
+                "to": {
+                  "model": "User",
+                  "namespace": "public"
+                }
+              }
+            },
+            "storage": {
+              "fields": {
+                "completed": {
+                  "column": "completed"
+                },
+                "createdAt": {
+                  "column": "createdAt"
+                },
+                "description": {
+                  "column": "description"
+                },
+                "id": {
+                  "column": "id"
+                },
+                "title": {
+                  "column": "title"
+                },
+                "updatedAt": {
+                  "column": "updatedAt"
+                },
+                "userId": {
+                  "column": "userId"
+                }
+              },
+              "namespaceId": "public",
+              "table": "Task"
+            }
+          },
           "User": {
             "fields": {
               "createdAt": {
@@ -129,6 +231,13 @@
                 }
               },
               "name": {
+                "nullable": true,
+                "type": {
+                  "codecId": "pg/text@1",
+                  "kind": "scalar"
+                }
+              },
+              "password": {
                 "nullable": true,
                 "type": {
                   "codecId": "pg/text@1",
@@ -165,6 +274,21 @@
                   "model": "Post",
                   "namespace": "public"
                 }
+              },
+              "tasks": {
+                "cardinality": "1:N",
+                "on": {
+                  "localFields": [
+                    "id"
+                  ],
+                  "targetFields": [
+                    "userId"
+                  ]
+                },
+                "to": {
+                  "model": "Task",
+                  "namespace": "public"
+                }
               }
             },
             "storage": {
@@ -180,6 +304,9 @@
                 },
                 "name": {
                   "column": "name"
+                },
+                "password": {
+                  "column": "password"
                 },
                 "updatedAt": {
                   "column": "updatedAt"
@@ -247,6 +374,7 @@
                   "index": {
                     "name": "Post_authorId_idx_e47547ed"
                   },
+                  "onDelete": "cascade",
                   "source": {
                     "columns": [
                       "authorId"
@@ -270,6 +398,95 @@
                   ],
                   "name": "Post_authorId_idx_e47547ed",
                   "prefix": "Post_authorId_idx",
+                  "unique": false
+                }
+              ],
+              "primaryKey": {
+                "columns": [
+                  "id"
+                ]
+              },
+              "uniques": []
+            },
+            "Task": {
+              "columns": {
+                "completed": {
+                  "codecId": "pg/bool@1",
+                  "dataType": "pg/bool",
+                  "default": {
+                    "kind": "literal",
+                    "value": false
+                  },
+                  "nullable": false
+                },
+                "createdAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "dataType": "pg/timestamptz",
+                  "default": {
+                    "expression": "now()",
+                    "kind": "function"
+                  },
+                  "nullable": false
+                },
+                "description": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
+                "id": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "default": {
+                    "expression": "autoincrement()",
+                    "kind": "function"
+                  },
+                  "nullable": false
+                },
+                "title": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": false
+                },
+                "updatedAt": {
+                  "codecId": "pg/timestamptz-string@1",
+                  "dataType": "pg/timestamptz",
+                  "nullable": false
+                },
+                "userId": {
+                  "codecId": "pg/int4@1",
+                  "dataType": "pg/int4",
+                  "nullable": false
+                }
+              },
+              "foreignKeys": [
+                {
+                  "index": {
+                    "name": "Task_userId_idx_a489d58a"
+                  },
+                  "onDelete": "cascade",
+                  "source": {
+                    "columns": [
+                      "userId"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "Task"
+                  },
+                  "target": {
+                    "columns": [
+                      "id"
+                    ],
+                    "namespaceId": "public",
+                    "tableName": "User"
+                  }
+                }
+              ],
+              "indexes": [
+                {
+                  "columns": [
+                    "userId"
+                  ],
+                  "name": "Task_userId_idx_a489d58a",
+                  "prefix": "Task_userId_idx",
                   "unique": false
                 }
               ],
@@ -310,6 +527,11 @@
                   "dataType": "pg/text",
                   "nullable": true
                 },
+                "password": {
+                  "codecId": "pg/text@1",
+                  "dataType": "pg/text",
+                  "nullable": true
+                },
                 "updatedAt": {
                   "codecId": "pg/timestamptz-string@1",
                   "dataType": "pg/timestamptz",
@@ -342,10 +564,10 @@
         "kind": "postgres-schema"
       }
     },
-    "storageHash": "a51b4833fdaffe730572670ccc27dd89af7e0726ab3de7f428d21702d687cc15"
+    "storageHash": "0149ed4724add81062323e363c138094a2a4e52f7793aa093d3421e7328d88bc"
   },
   "execution": {
-    "executionHash": "3730158042e7c88d23f35529e89ad90532db0cd5c528c13e701f93cb45aa8a9c",
+    "executionHash": "517e0aec4593dacbc19ef53f1c1bb343f0b679ffd6df84131d31010ffed5d83c",
     "mutations": {
       "defaults": [
         {
@@ -359,6 +581,21 @@
           },
           "ref": {
             "entry": "Post",
+            "field": "updatedAt",
+            "namespace": "public"
+          }
+        },
+        {
+          "onCreate": {
+            "id": "timestamptzStringNow",
+            "kind": "generator"
+          },
+          "onUpdate": {
+            "id": "timestamptzStringNow",
+            "kind": "generator"
+          },
+          "ref": {
+            "entry": "Task",
             "field": "updatedAt",
             "namespace": "public"
           }
