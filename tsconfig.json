@@ -14,9 +14,8 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "outDir": "dist",
-    "types": [
-      "node"
-    ]
+    "types": ["node"]
   },
-  "include": ["src/**/*.ts"]
+
+  "include": ["src/**/*.ts", "prisma.config.ts", "tsdown.config.ts"]
 }
